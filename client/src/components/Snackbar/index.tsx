@@ -15,7 +15,7 @@ const SnackbarCustom = (props: SnackbarCustomProps) => {
         open={props.isOpen}
         autoHideDuration={3000}
         onClose={props.handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           severity={props.severity}

@@ -23,14 +23,6 @@ const dashboard = (props: dashboardProps) => {
     }
   }, []);
 
-  const onLogout = () => {
-    document.cookie =
-      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie =
-      "authTokenExpiration=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/";
-  };
-
   if (loading) {
     return (
       <Box
@@ -48,10 +40,7 @@ const dashboard = (props: dashboardProps) => {
 
   return (
     <div>
-      <NavBar
-        name={`${userInfo?.firstName} ${userInfo?.lastName}`}
-        onLogout={onLogout}
-      />
+      <NavBar name={`${userInfo?.firstName} ${userInfo?.lastName}`} />
     </div>
   );
 };

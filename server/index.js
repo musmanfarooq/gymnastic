@@ -2,10 +2,13 @@ import express from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql";
 import cors from "cors";
-import signup from "./routes/user/signup.js";
-import signin from "./routes/user/signin.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import signup from "./routes/user/signup.js";
+import signin from "./routes/user/signin.js";
+import getuserinfo from "./routes/user/getuserinfo.js";
+import updateuser from "./routes/user/updateuser.js";
+import authorization from "./auth/auth.js";
 
 dotenv.config();
 
@@ -52,6 +55,12 @@ app.get("/", (req, res) => {
 app.post("/signup", signup);
 
 app.post("/signin", signin);
+
+app.post("/getuserinfo",authorization, getuserinfo);
+
+app.put("/updateuserinfo", authorization,updateuser );
+
+// app.delete("/deleteuserinfo", authorization, getuserinfo);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

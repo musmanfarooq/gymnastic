@@ -4,20 +4,14 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { Avatar, Tooltip } from "@mui/material";
-import {
-  LogoutOutlined,
-  Person,
-  Person4Outlined,
-  Settings,
-} from "@mui/icons-material";
+import { LogoutOutlined, Settings } from "@mui/icons-material";
+import Link from "next/link";
 
 interface NavBarProps {
   name?: string;
-  onLogout?: () => void;
 }
 
 export default function NavBar(props: NavBarProps) {
@@ -31,12 +25,25 @@ export default function NavBar(props: NavBarProps) {
     setAnchorEl(null);
   };
 
+  const onLogout = () => {
+    document.cookie =
+      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "authTokenExpiration=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/";
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="transparent">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Gymnastic
+            <Link
+              href={"/dashboard"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Gymnastic
+            </Link>
           </Typography>
           <Tooltip title={`${props.name}`} placement="bottom-start">
             <IconButton
@@ -65,16 +72,21 @@ export default function NavBar(props: NavBarProps) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>
-              <Box
-                flex={1}
-                sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+            <MenuItem>
+              <Link
+                href={"/profile"}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
-                <Settings />
-                Profile
-              </Box>
+                <Box
+                  flex={1}
+                  sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+                >
+                  <Settings />
+                  Profile
+                </Box>
+              </Link>
             </MenuItem>
-            <MenuItem onClick={props.onLogout}>
+            <MenuItem onClick={onLogout}>
               <Box
                 flex={1}
                 sx={{ display: "flex", alignItems: "center", gap: "6px" }}

@@ -1,15 +1,41 @@
-const authorization = (req, res, next) => {
-  const token = req.cookies.access_token;
-  if (!token) {
-    return res.sendStatus(403);
-  }
+import jwt from "jsonwebtoken";
+import { pool } from "../index.js";
+
+const authorization = async (req, res, next) => {
   try {
-    const data = jwt.verify(token, "YOUR_SECRET_KEY");
-    req.userId = data.id;
-    req.userRole = data.role;
-    return next();
-  } catch {
-    return res.sendStatus(403);
+    const token = req.body.token;
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const userId = decoded.userId;
+
+    //Check if token is expires
+    if (decoded.exp < Date.now() / 1000) {
+      return res.status(401).json({
+        error: "Unauthorized Token Expired",
+      });
+    }
+
+    pool.query(
+      "SELECT * FROM users WHERE userId = ?",
+      [userId],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        if (results.length === 0) {
+          res.status(401).json({
+            error: "Unauthorized",
+          });
+        } else {
+          req.userId = userId;
+          next();
+        }
+      }
+    );
+  } catch (error) {
+    console.error("Error during authorization:", error);
+    res.status(401).json({
+      error: "Unauthorized",
+    });
   }
 };
 

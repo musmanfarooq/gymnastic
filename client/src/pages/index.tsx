@@ -1,5 +1,4 @@
 "use client";
-import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { token } from "@/libs/getToken";
@@ -8,7 +7,9 @@ import { useMutation } from "react-query";
 import { signinApi } from "@/api/userApi";
 import SnackbarCustom from "@/components/Snackbar";
 
-const SignIn = dynamic(() => import("@/components/signin"), { ssr: false });
+const SignIn = dynamic(() => import("@/components/Signin/index"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -20,19 +21,25 @@ export default function Home() {
     "success" | "error" | "info" | "warning"
   >("success");
 
+  const validRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const isValidEmail = (email: string) => {
+    return validRegex.test(email);
+  };
+
   const signinQuery = useMutation(
     ["signin"],
     () => signinApi(email, password),
     {
       onSuccess: (data) => {
         document.cookie = `authToken=${data.data.token}; path=/`;
-        const expirationTime = new Date().getTime() + 1 * 100;
+        const expirationTime = new Date().getTime() + 1 * 1;
         document.cookie = `authTokenExpiration=${expirationTime}; path=/;`;
         window.location.href = "/dashboard";
       },
       onError: (error: any) => {
         setSeverity("error");
-        setToastMessage(error.response.data.error);
+        setToastMessage(error.response.data.error || error.message);
         setToastOpen(true);
         console.log(error);
       },
@@ -49,6 +56,18 @@ export default function Home() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!email || !password) {
+      setSeverity("error");
+      setToastMessage("Please fill all the fields.");
+      setToastOpen(true);
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setSeverity("error");
+      setToastMessage("Please enter a valid email address.");
+      setToastOpen(true);
+      return;
+    }
     signinQuery.mutate();
   };
 

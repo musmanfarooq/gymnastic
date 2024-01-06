@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
-const SignUp = dynamic(() => import("@/components/signup"), {
+const SignUp = dynamic(() => import("@/components/Signup/index"), {
   ssr: false,
 });
 
@@ -22,21 +22,34 @@ const index = () => {
     "success" | "error" | "info" | "warning"
   >("success");
 
+  const validRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const isValidEmail = (email: string) => {
+    return validRegex.test(email);
+  };
+
   const signupQuery = useMutation(
     ["signup"],
     () => signupApi(firstName, lastName, email, password),
     {
       onSuccess: (data) => {
         setSeverity("success");
-        setToastMessage(data.data?.message);
+        setToastMessage(
+          `${data.data?.message} \n Redirecting you to login Page.`
+        );
         setToastOpen(true);
-        console.log(data.data?.message);
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
       },
       onError: (error: any) => {
         setSeverity("error");
-        setToastMessage(error.response.data.error);
+        setToastMessage(error.response.data.error || error.message);
         setToastOpen(true);
-        console.log(error);
       },
     }
   );
@@ -51,6 +64,18 @@ const index = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!email || !password || !firstName || !lastName) {
+      setSeverity("error");
+      setToastMessage("Please fill all the fields.");
+      setToastOpen(true);
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setSeverity("error");
+      setToastMessage("Please enter a valid email address.");
+      setToastOpen(true);
+      return;
+    }
     signupQuery.mutate();
   };
 
