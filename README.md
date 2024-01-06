@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 # Gymnastic
 
 ## Getting Started
@@ -11,36 +9,36 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Project Setup
 
 1. Clone this project [https://github.com/musmanfarooq/gymnastic.git](https://github.com/musmanfarooq/gymnastic.git)
-2. Open workspace form the VS Code
+2. Open the workspace from the VS Code
    - Click on Files
    - Click on Open Workspace form files
-   - And choose digital-dashboard.code.workspace files present in the root
-3. Navigate to client folder by either selecting it form the terminal for run this command in the terminal
+   - And choose digital-dashboard. code.workspace files present in the root
+3. Navigate to the client folder by selecting it from the terminal to run this command in the terminal
 
 ```bash
 cd client
 ```
 
-4. Install dependencie
+4. Install dependencies
 
 ```bash
 npm install
 ```
 
-5. Now navigate to the server folder by using VS Code terminal or use this
+5. Now navigate to the server folder by using the VS Code terminal or use this
 
 ```bash
 cd server
 ```
 
-6. Install dependencie
+6. Install dependencies
 
 ```bash
 npm install
 ```
 
 7. Environment Variables
-   - In server folder create a `.env ` file and paste these
+   - In the server folder create a `.env ` file and paste these
 
 ```bash
 PORT = "5000"
@@ -48,19 +46,18 @@ SECRET_KEY = "add_secret_key_here"
 
 ```
 
-- In client folder create a `.env.local` file and paste these
+- In the client folder create a `.env.local` file and paste these
 
 
 ## Project Startup
 
-1. Use the following commmand to run the client folder
+1. Use the following command to run the client folder
    ```bash
    npm run dev
    ```
-   - Create a new account form the dashboard
-2. Use these comand in the server folder to run the server
+   - Create a new account from the dashboard
+2. Use this command in the server folder to run the server
    ```bash
-   npm run build
    npm run dev
    ```
 
